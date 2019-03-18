@@ -5,6 +5,7 @@ Developed to classify bikes as either 'Mountain Bikes' or 'Road Bikes'
 The majority of this work was taken from the following repositories and reworked for this learning exercise:  
 https://github.com/MicrocontrollersAndMore/TensorFlow_Tut_1_Installation_and_First_Progs  
 https://github.com/MicrocontrollersAndMore/TensorFlow_Tut_2_Classification_Walk-through
+https://www.tensorflow.org/tutorials/load_data/images
 
 ### Installation
 * git clone https://github.com/aumenchr/countDice.git

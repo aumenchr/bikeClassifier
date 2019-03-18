@@ -1,3 +1,9 @@
+###
+#	DISCLAIMER:
+#		This work is heavily borrowed from other projects and tutorials
+#	NOTE:  To find modifications to work taken from other files, <CTRL-F> - "CAA:" - [FIND NEXT]
+###
+
 from __future__ import absolute_import, division, print_function
 
 import tensorflow as tf
@@ -22,10 +28,11 @@ GRAPH_DIR = os.path.join(ROOT_DIR, GRAPH_LOC)
 assert(CHANNELS in [1,3])
 
 def main(_):
-	# Get the training and testing datasets and associated variables
-    ds, num_images, label_names, label_to_index = getData()
+	# CAA: Get the training and testing datasets and associated variables
+	ds, num_images, label_names, label_to_index = getData()
     test_ds, test_num_images, test_label_names, test_label_to_index = getData('test')
 	
+	# CAA: adapted from https://www.tensorflow.org/tutorials/load_data/images
 	# Shuffle the datasets and prepare an iterator for training
     ds = ds.shuffle(buffer_size=num_images)
     ds = ds.repeat()
@@ -38,7 +45,7 @@ def main(_):
     test_iterator = test_ds.make_one_shot_iterator().get_next()
 	
 	###
-	#	The rest was taken from mnist_deep.py except where noted by initials CAA
+	#	The rest of main was taken from mnist_deep.py except where noted by initials CAA
 	###
     # Create the model
     x = tf.placeholder(tf.float32, [None, IMAGE_SIZE, IMAGE_SIZE, CHANNELS]) # CAA: Modified parameters to be customizable
@@ -49,7 +56,7 @@ def main(_):
     # Build the graph for the deep net
     y_conv, keep_prob = deepnn(x, len(label_names)) # CAA: Modified input arguments to include variable number of classes
 
-	# CAA: Creating a final tensor to be used by the "test.py" script
+	# CAA: Creating a final tensor to be used by the "test.py" script... is it possible to somehow use cross_entropy or train_step?
     final_tensor = tf.nn.softmax(y_conv, name=FINAL_TENSOR_NAME)
 	
 
@@ -99,7 +106,8 @@ def main(_):
 
 #######################################################################################################################
 ###
-# Pulled from retrain.py
+# Taken from 
+#  https://github.com/MicrocontrollersAndMore/TensorFlow_Tut_2_Classification_Walk-through >> retrain.py
 ###
 def save_graph_to_file(sess, graph, graph_file_name):
     output_graph_def = graph_util.convert_variables_to_constants(sess, graph.as_graph_def(), [FINAL_TENSOR_NAME])

@@ -1,4 +1,4 @@
-## CountDice
+## Bike Classifier
 A Convultional Neural Network (CNN) designed to classify images.  
 Developed to classify bikes as either 'Mountain Bikes' or 'Road Bikes'
 

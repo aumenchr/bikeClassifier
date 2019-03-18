@@ -22,6 +22,6 @@ https://github.com/MicrocontrollersAndMore/TensorFlow_Tut_2_Classification_Walk-
 ### Classify an Image
 * cd <path/to>/bikeClassifier
 * KEEP SETTINGS THE SAME AS USED TO TRAIN NETWORK
-  *If unsure what the settings were, modify and retrain the model
+  * If unsure what the settings were, modify and retrain the model
 * Ensure images exist in <FINAL_TESTING_IMAGES_DIR>, do not place in subfolders
 * ``` python test.py ```

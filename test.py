@@ -1,20 +1,24 @@
-# test.py
-
+###
+#	Entire file taken from
+#	https://github.com/MicrocontrollersAndMore/TensorFlow_Tut_2_Classification_Walk-through >> test.py
+#		except where modified notated by initials CAA
+#			NOTE: TO FIND ALL MODIFICATIONS <CTRL-F> - "CAA:" - [FIND NEXT]
+###
 import os
 import tensorflow as tf
 import numpy as np
 import cv2
 import sys
 
+# CAA: Added setting importing to bring in changes automatically
 ROOT_DIR = os.getcwd()
 sys.path.append(ROOT_DIR)
 from settings import *
 
 # module-level variables ##############################################################################################
-RETRAINED_LABELS_TXT_FILE_LOC = os.path.join(ROOT_DIR, LABEL_FILENAME)
-RETRAINED_GRAPH_PB_FILE_LOC = os.path.join(ROOT_DIR, GRAPH_FILENAME)
-
-TEST_IMAGES_DIR = os.path.join(ROOT_DIR, FINAL_TESTING_IMAGES_DIR)
+RETRAINED_LABELS_TXT_FILE_LOC = os.path.join(ROOT_DIR, LABEL_FILENAME) # CAA: Modified how paths are stored to keep consistent
+RETRAINED_GRAPH_PB_FILE_LOC = os.path.join(ROOT_DIR, GRAPH_FILENAME) # CAA: Same as ^
+TEST_IMAGES_DIR = os.path.join(ROOT_DIR, FINAL_TESTING_IMAGES_DIR) # CAA: Same as ^^
 #######################################################################################################################
 def main():
     print("starting program . . .")
@@ -67,14 +71,7 @@ def main():
             imageFileWithPath = os.path.join(TEST_IMAGES_DIR, fileName)
             # attempt to open the image with OpenCV
             openCVImage = cv2.imread(imageFileWithPath)
-            '''
-                Tried to convert to grayscale as anticipated, but this was
-                causing errors when inserted into the session
-            '''
-            # if CHANNELS == 1:
-            #   tfImage = cv2.cvtColor(openCVImage, cv2.COLOR_BGR2GRAY)
-            #   tfImage = [cv2.resize(tfImage, (IMAGE_SIZE, IMAGE_SIZE))]
-            tfImage = [cv2.resize(openCVImage, (IMAGE_SIZE, IMAGE_SIZE))]
+            tfImage = [cv2.resize(openCVImage, (IMAGE_SIZE, IMAGE_SIZE))] # CAA: Adjusting image size to fit model
 
             # if we were not able to successfully open the image, continue with the next iteration of the for loop
             if openCVImage is None:
@@ -83,12 +80,15 @@ def main():
             # end if
 
             # get the final tensor from the graph
-            finalTensor = sess.graph.get_tensor_by_name(FINAL_TENSOR_NAME+':0')
+            finalTensor = sess.graph.get_tensor_by_name(FINAL_TENSOR_NAME+':0') # CAA: Feeding tensor name as variable
 
             # convert the OpenCV image (numpy array) to a TensorFlow image
             '''
+				CAA:
                 I know this isn't correct, but when I convert it to grayscale the
-                np.array sees it as (1, 28, 28) instead of (1, 28, 28, 1)
+                np.array sees it as (1, 28, 28) instead of (1, 28, 28, 1), this does
+				seem to work for now though.
+				possible fix: Convert images to flat_maps for both train/test ???
             '''
             if CHANNELS == 1:
                 tfImage = np.array(tfImage)[:,:,:,0:1]
@@ -96,7 +96,7 @@ def main():
                 tfImage = np.array(tfImage)[:,:,:,:]
 
             # run the network to get the predictions
-            predictions = sess.run(finalTensor, {'Placeholder:0': tfImage, 'dropout/Placeholder:0': 1.0})
+            predictions = sess.run(finalTensor, {'Placeholder:0': tfImage, 'dropout/Placeholder:0': 1.0}) # CAA: Had to include a feed for the dropout, not sure if this is correct but it works
 
             # sort predictions from most confidence to least confidence
             sortedPredictions = predictions[0].argsort()[-len(predictions[0]):][::-1]
